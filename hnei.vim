@@ -6,15 +6,40 @@
 " in Vim, it is recommended to record a macro with an empty langmap.
 "
 " The t-f-j rotation is enabled by default but can be disabled using:
-"let g:colemak_basics_rotate_t_f_j = 0
-if get(g:, 'colemak_basics_rotate_t_f_j', 1)
-  set langmap=nN;jJ,eE;kK,iI;lL,kK;nN,uU;iI,lL;uU,fF;eE,tT;fF,jJ;tT
-else
-  set langmap=nN;jJ,eE;kK,iI;lL,kK;nN,uU;iI,lL;uU,jJ;eE
-endif
+" let g:colemak_basics_rotate_t_f_j = 0
 
-" Do not apply the langmap to characters resulting from a mapping.
-set nolangremap
+if has('langmap')
+  if get(g:, 'colemak_basics_rotate_t_f_j', 1)
+    set langmap=nN;jJ,eE;kK,iI;lL,kK;nN,uU;iI,lL;uU,fF;eE,tT;fF,jJ;tT
+  else
+    set langmap=nN;jJ,eE;kK,iI;lL,kK;nN,uU;iI,lL;uU,jJ;eE
+  endif
+
+  " Do not apply the langmap to characters resulting from a mapping.
+  set nolangremap
+else
+  noremap n j
+  noremap e k
+  noremap i l
+
+  noremap k n
+  noremap K N
+  noremap u i
+  noremap U I
+  noremap l u
+  noremap L U
+  noremap N J
+  noremap E K
+
+  if get(g:, 'colemak_basics_rotate_t_f_j', 1)
+    noremap f e
+    noremap F E
+    noremap t f
+    noremap T F
+    noremap j t
+    noremap J T
+  endif
+endif
 
 " Now, we only need to add few remappings not covered by langmap.  Note that
 " the langmap setting does not apply to "CTRL + <KEY>", but fortunately, these
@@ -31,6 +56,7 @@ inoremap <c-g>n <c-g>j
 inoremap <c-g><c-n> <c-g><c-j>
 inoremap <c-g>e <c-g>k
 inoremap <c-g><c-e> <c-g><c-k>
+
 " Due to some bug in Vim 8.0, the following two tautological lines are also
 " necessary for the Insert mode remappings to work.
 inoremap <c-g>j <c-g>j
